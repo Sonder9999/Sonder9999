@@ -1,10 +1,4 @@
-- 👋 Hi, I’m @Sonder9999(A college student from China) (●'◡'●)
-- My major is computer science. *⁂((✪⥎✪))⁂*
-- I am a beginner; my programming skills are not very good, and my English is not very good either. ˃ʍ˂
-- 💞️ I’m looking to collaborate on projects that can help me improve my programming and English skills. ⌓‿⌓
-- 📫 How to reach me 2734165908@qq.com or QQ Number：2734165908 ;(I also have Twitter(it is X now) and Line); (u‿ฺu✿)
-- I like anime (✧∇✧)
-
+Sonder
 
 <!---
 Sonder9999/Sonder9999 is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
