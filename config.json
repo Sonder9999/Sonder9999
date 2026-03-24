@@ -1,0 +1,27 @@
+{
+  "fav_anime": [
+    {"name": "败犬女主太多了！", "bgm_id": 464376},
+    {"name": "我心里危险的东西", "bgm_id": 394260},
+    {"name": "Engage Kiss", "bgm_id": 375817},
+    {"name": "超时空辉夜姬", "bgm_id": 604826},
+    {"name": "为美好的世界献上祝福", "bgm_id": 135275},
+    {"name": "这个美术社大有问题", "bgm_id": 150746},
+    {"name": "出包王女 OVA", "bgm_id": 3325},
+    {"name": "葬送的芙莉莲", "bgm_id": 400602},
+    {"name": "笨蛋测验召唤兽", "bgm_id": 3326},
+    {"name": "不正经的魔术讲师与禁忌教典", "bgm_id": 174138}
+  ],
+  "fav_chars": [
+    {"display": "八奈见杏菜", "search": "Anna Yanami"},
+    {"display": "山田杏奈", "search": "Anna Yamada"},
+    {"display": "Kisara", "search": "Kisara"},
+    {"display": "宇佐美瑞希", "search": "Mizuki Usami"},
+    {"display": "Darkness", "search": "Golden Darkness"},
+    {"display": "濑名紫阳花", "search": "Ajisai Sena"},
+    {"display": "玛莉亚", "search": "Maria Mikhailovna Kujou"},
+    {"display": "椎名真昼", "search": "Mahiru Shiina"},
+    {"display": "佐久奈", "search": "Sakuna Memoir"},
+    {"display": "希丝缇娜", "search": "Sistine Fibel"},
+    {"display": "森亜るるか", "search": "Ruruka Moria", "img": "https://s4.anilist.co/file/anilistcdn/character/large/default.jpg", "url": "#"}
+  ]
+}
