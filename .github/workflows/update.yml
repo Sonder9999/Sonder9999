@@ -1,0 +1,139 @@
+name: Update Profile
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  push:
+    branches: ["master", "main"]
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Update README with Bangumi Data
+        run: |
+          cat << 'EOF' > run_script.py
+          import os, json, re, urllib.parse, requests
+          API_URL = "https://api.bgm.tv/v0"
+          HEADERS = {"User-Agent": "Sonder9999/github-profile (https://github.com/Sonder9999)"}
+
+          def load_config():
+              if os.path.exists("config.json"):
+                  with open("config.json", "r", encoding="utf-8") as f:
+                      return json.load(f)
+              return {"fav_anime": [], "fav_chars": []}
+
+          def fetch_anime(item):
+              if "bgm_id" in item:
+                  try:
+                      res = requests.get(f"{API_URL}/subjects/{item['bgm_id']}", headers=HEADERS, timeout=10).json()
+                      if res.get("images"):
+                          img = res["images"]["large"] or res["images"]["common"]
+                          return {"name": res.get("name_cn") or res.get("name"), "img": img, "url": f"https://bgm.tv/subject/{item['bgm_id']}"}
+                  except Exception as e: print(e)
+              return None
+
+          def fetch_char(item):
+              query = "query ($s: String) { Character(search: $s) { name { full native } image { large } siteUrl } }"
+              try:
+                  res = requests.post("https://graphql.anilist.co", json={"query": query, "variables": {"s": item["search"]}}, timeout=10).json()
+                  if "data" in res and res["data"]["Character"]:
+                      char = res["data"]["Character"]
+                      return {"name": item["display"], "img": char["image"]["large"], "url": char["siteUrl"]}
+              except Exception as e: print(e)
+              if "img" in item:
+                  return {"name": item["display"], "img": item["img"], "url": item.get("url", "#")}
+              return None
+
+          def generate_table(items, cols=5):
+              h = "<table align=\"center\" style=\"border: none;\">\n"
+              for i in range(0, len(items), cols):
+                  h += "  <tr>\n"
+                  row = items[i:i+cols]
+                  for x in row:
+                      h += f"    <td align=\"center\" width=\"{100//cols}%\">\n      <a href=\"{x['url']}\">\n        <img src=\"{x['img']}\" width=\"100px\" height=\"140px\" style=\"object-fit: cover; border-radius: 8px;\"><br/>\n        <sub><b>{x['name'][:15]}</b></sub>\n      </a>\n    </td>\n"
+                  for _ in range(cols - len(row)): h += f"    <td width=\"{100//cols}%\"></td>\n"
+                  h += "  </tr>\n"
+              h += "</table>\n"
+              return h
+
+          config = load_config()
+          watching = []
+          try:
+              w_res = requests.get(f"{API_URL}/users/864927/collections?subject_type=2&type=3&limit=5", headers=HEADERS, timeout=10).json()
+              for x in w_res.get("data", []):
+                  subj = x.get("subject", {})
+                  img = subj.get("images", {}).get("large", "")
+                  name = subj.get("name_cn") or subj.get("name", "")
+                  url = f"https://bgm.tv/subject/{subj.get('id')}"
+                  watching.append({"name": name, "img": img, "url": url})
+          except Exception as e: print(e)
+
+          fav_anime = [x for x in (fetch_anime(c) for c in config.get("fav_anime", [])) if x]
+          fav_chars = [x for x in (fetch_char(c) for c in config.get("fav_chars", [])) if x]
+
+          md = ""
+          if watching: md += "### 📺 正在看 (Currently Watching)\n\n" + generate_table(watching, 5) + "\n"
+          if fav_anime: md += "### ✨ 最喜欢的 Anime (Favorite Anime)\n\n" + generate_table(fav_anime, 5) + "\n"
+          if fav_chars: md += "### 💖 最喜欢的角色 (Favorite Characters)\n\n" + generate_table(fav_chars, 5) + "\n"
+
+          with open("README.md", "r", encoding="utf-8") as f: content = f.read()
+          new_content = re.sub(r"(<!--\s*bangumi_start\s*-->).*?(<!--\s*bangumi_end\s*-->)", f"\\1\n{md}\n\\2", content, flags=re.DOTALL)
+          with open("README.md", "w", encoding="utf-8") as f: f.write(new_content)
+          EOF
+          python run_script.py
+          rm run_script.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add README.md
+          git commit -m "Auto-update Bangumi data" || echo "No changes to commit"
+          git push
+
+  github-metrics:
+    needs: update-readme
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main 
+          fetch-depth: 1
+
+      - uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: metrics.svg
+          template: classic
+          config_timezone: Asia/Shanghai
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
+          plugin_languages: yes
+          plugin_languages_indepth: yes
+          plugin_languages_limit: 8
+          plugin_languages_sections: most-used
+          plugin_languages_colors: github
+          plugin_activity: yes
+          plugin_activity_days: 14
+          plugin_activity_limit: 5
+          plugin_activity_visibility: public
+          plugin_stars: yes
+          plugin_stars_limit: 5
