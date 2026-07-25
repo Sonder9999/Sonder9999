@@ -5,6 +5,7 @@
 *Hi there! A developer passionate about productivity enhancements and AI-assisted automation.*
 
 <br/>
+
 _AI开发,做点自己需要用到的,比如 anki+GPT Sovits 生成自己喜欢的角色语音的例句音频_
 <br/>
 _还喜欢做一些ACGN类的开发(比如kikoplay自动识别下载弹幕,rss订阅+pikpak下载并重命名绑定番剧)_
