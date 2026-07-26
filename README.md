@@ -8,7 +8,7 @@
 
 **Blog:** [https://blog.hodaru.com/](https://blog.hodaru.com/)
 
-**Org:** [Henu-Kaguya](https://github.com/orgs/Henu-Kaguya/repositories)
+**Org:** [Henu-Kaguya](https://github.com/orgs/Henu-Kaguya/repositories) - *An organization created by me for sharing university course knowledge*
 
 **Contact:** 2734165908@qq.com | **QQ:** 2734165908
 
