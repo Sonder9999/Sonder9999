@@ -15,12 +15,26 @@
 
 ### Projects
 
-大多都是一些日常遇到的,ACGN相关的项目
+- [HoYo_Quest_Voice](https://github.com/Sonder9999/HoYo_Quest_Voice) - 玩游戏过剧情的过程中自动生成角色配音（未完善，尚在施工中）
+
+#### 分类与整理工具
+- [GitHub-Star-Category-Optimization-Assistant](https://github.com/Sonder9999/GitHub-Star-Category-Optimization-Assistant) - GitHub Star 分类与优化(LLM)
+- [bilibili_fav_assistant](https://github.com/Sonder9999/bilibili_fav_assistant) - Bilibili 收藏夹管理与分类
+- [pikpak_calssify](https://github.com/Sonder9999/pikpak_calssify) - Pikpak 云盘文件分类整理
+- [mail_classification](https://github.com/Sonder9999/mail_classification) - 邮件智能分类整理工具
+- [llm-file-classifier](https://github.com/Sonder9999/llm-file-classifier) - LLM 通用文件分类工具
+
+#### Anki 与语言学习
 - [AnkiVoice](https://github.com/Sonder9999/AnkiVoice) - Anki + GPT-SoVITS 生成喜欢的角色语音例句音频
-- [kikoplay-auto-local-or-dandan-danmu](https://github.com/Sonder9999/kikoplay-auto-local-or-dandan-danmu) - Kikoplay 自动识别下载弹幕
-- [Pikpak_Auto_Bangumi](https://github.com/Sonder9999/Pikpak_Auto_Bangumi) - RSS 订阅 + Pikpak 下载并重命名绑定番剧
-- [RainClassroom-Exam-Downloader](https://github.com/Sonder9999/RainClassroom-Exam-Downloader) - 雨课堂网页端课件与考试下载备份工具
-- [HoYo_Quest_Voice](https://github.com/Sonder9999/HoYo_Quest_Voice) - Vibe coding 项目（未完善，尚在施工中）
+- [anki-contextual-reader](https://github.com/Sonder9999/anki-contextual-reader) - Anki + LLM 阅读辅助工具
+- [AI-Powered_Contextual_Reader](https://github.com/Sonder9999/AI-Powered_Contextual_Reader) - AI + docs 阅读器(自动划词并结合语境分析)
+
+#### ACGN 与媒体自动化
+- [kikoplay-auto-local-or-dandan-danmu](https://github.com/Sonder9999/kikoplay-auto-local-or-dandan-danmu) - Kikoplay 识别番剧之后自动下载弹幕
+- [Pikpak_Auto_Bangumi](https://github.com/Sonder9999/Pikpak_Auto_Bangumi) - RSS 订阅 + Pikpak 下载绑定番剧(解决了qbit下载慢)
+
+#### 学校里用到的
+- [RainClassroom-Exam-Downloader](https://github.com/Sonder9999/RainClassroom-Exam-Downloader) - 雨课堂网页端课件与考试下载备份
 
 <br/>
 
