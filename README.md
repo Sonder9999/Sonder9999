@@ -9,9 +9,8 @@
   <a href="https://github.com/orgs/Henu-Kaguya/repositories"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/nav-org-night.svg" /><source media="(prefers-color-scheme: light)" srcset="assets/nav-org-day.svg" /><img src="assets/nav-org-day.svg" height="28" alt="Henu-Kaguya GitHub Organization" /></picture></a>
   <a href="https://henu.hodaru.com/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/nav-website-night.svg" /><source media="(prefers-color-scheme: light)" srcset="assets/nav-website-day.svg" /><img src="assets/nav-website-day.svg" height="28" alt="Website: henu.hodaru.com" /></picture></a>
   <a href="mailto:2734165908@qq.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/nav-email-night.svg" /><source media="(prefers-color-scheme: light)" srcset="assets/nav-email-day.svg" /><img src="assets/nav-email-day.svg" height="28" alt="Email: 2734165908@qq.com" /></picture></a>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="assets/nav-qq-night.svg" /><source media="(prefers-color-scheme: light)" srcset="assets/nav-qq-day.svg" /><img src="assets/nav-qq-day.svg" height="28" alt="QQ: 2734165908" /></picture>
+  <a href="https://qm.qq.com/q/N7GjAxCLGS"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/nav-qq-night.svg" /><source media="(prefers-color-scheme: light)" srcset="assets/nav-qq-day.svg" /><img src="assets/nav-qq-day.svg" height="28" alt="QQ: 2734165908" /></picture></a>
 </p>
-
 </div>
 
 ## Projects
