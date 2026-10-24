@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164 30" width="164" height="30">
+  <rect width="164" height="30" rx="8" fill="#FFFFFF" stroke="#BAE6FD" stroke-width="1.2"/>
+  <path d="M 8,0 H 42 V 30 H 8 A 8,8 0 0 1 0,22 V 8 A 8,8 0 0 1 8,0 Z" fill="#0284C7"/>
+  <text x="21.0" y="19" text-anchor="middle" font-family="'JetBrains Mono', 'Fira Code', 'Noto Sans Mono CJK SC', 'DejaVu Sans Mono', monospace" font-size="11" font-weight="700" fill="#FFFFFF">Email</text>
+  <text x="103.0" y="19" text-anchor="middle" font-family="'JetBrains Mono', 'Fira Code', 'Noto Sans Mono CJK SC', 'DejaVu Sans Mono', monospace" font-size="11" font-weight="700" fill="#0F172A">2734165908@qq.com</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 432 112" width="100%" height="100%">
+  <rect x="1" y="1" width="430" height="110" rx="14" fill="#0F172A" stroke="#1E293B" stroke-width="1.5"/>
+  <rect x="1" y="1" width="6" height="110" rx="3" fill="#34D399"/>
+  <text x="22" y="31" font-family="'JetBrains Mono', 'Fira Code', 'Noto Sans Mono CJK SC', 'DejaVu Sans Mono', monospace" font-size="15" font-weight="800" fill="#F8FAFC">kiko-dandan-downloader</text>
+  <rect x="344" y="14" width="72" height="22" rx="11" fill="#064E3B"/>
+  <text x="380.0" y="29" text-anchor="middle" font-family="'JetBrains Mono', 'Fira Code', 'Noto Sans Mono CJK SC', 'DejaVu Sans Mono', monospace" font-size="10.5" font-weight="700" fill="#6EE7B7">KikoPlay</text>
+  <text x="22" y="59" font-family="'Noto Sans CJK SC', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif" font-size="13" font-weight="500" fill="#CBD5E1">KikoPlay 番剧识别后自动匹配并后台下载弹弹Play剧集弹幕。</text>
+  <text x="22" y="81" font-family="'Noto Sans CJK SC', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif" font-size="13" font-weight="500" fill="#CBD5E1"></text>
+  <text x="416" y="98" text-anchor="end" font-family="'JetBrains Mono', 'Fira Code', 'Noto Sans Mono CJK SC', 'DejaVu Sans Mono', monospace" font-size="10.5" font-weight="700" fill="#34D399">↗ View Repo</text>
+</svg>

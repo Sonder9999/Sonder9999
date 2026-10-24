@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 872 96" width="100%" height="100%">
+  <rect x="1" y="1" width="870" height="94" rx="14" fill="#0F172A" stroke="#1E293B" stroke-width="1.5"/>
+  <rect x="1" y="1" width="6" height="94" rx="3" fill="#34D399"/>
+  <text x="22" y="31" font-family="'JetBrains Mono', 'Fira Code', 'Noto Sans Mono CJK SC', 'DejaVu Sans Mono', monospace" font-size="15" font-weight="800" fill="#F8FAFC">astro-course-hub</text>
+  <rect x="779" y="14" width="77" height="22" rx="11" fill="#064E3B"/>
+  <text x="817.5" y="29" text-anchor="middle" font-family="'JetBrains Mono', 'Fira Code', 'Noto Sans Mono CJK SC', 'DejaVu Sans Mono', monospace" font-size="10.5" font-weight="700" fill="#6EE7B7">Course Hub</text>
+  <text x="22" y="59" font-family="'Noto Sans CJK SC', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif" font-size="13" font-weight="500" fill="#CBD5E1">现代化大学课程资源导航与教学大纲静态站点模板，内置全文检索、KaTeX 与 Mermaid。</text>
+  <text x="22" y="81" font-family="'Noto Sans CJK SC', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif" font-size="13" font-weight="500" fill="#CBD5E1"></text>
+  <text x="856" y="82" text-anchor="end" font-family="'JetBrains Mono', 'Fira Code', 'Noto Sans Mono CJK SC', 'DejaVu Sans Mono', monospace" font-size="10.5" font-weight="700" fill="#34D399">↗ View Repo</text>
+</svg>
