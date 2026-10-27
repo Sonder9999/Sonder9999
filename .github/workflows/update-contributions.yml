@@ -21,7 +21,9 @@ concurrency:
 
 jobs:
   update:
-    runs-on: ubuntu-latest
+    # 固定 Ubuntu 版本：避免 ubuntu-latest 升级时字体/FreeType 渲染出现细微差异，
+    # 导致每周多出一次无意义的 GIF 变更。要升级时改成新版本并手动跑一次即可。
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
 
     steps:
