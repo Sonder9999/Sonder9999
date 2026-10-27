@@ -43,6 +43,6 @@
 
 <p align="center">
   <a href="https://github.com/Sonder9999">
-    <picture><source media="(prefers-color-scheme: dark)" srcset="assets/contrib-night-anim.gif" /><source media="(prefers-color-scheme: light)" srcset="assets/contrib-anim.gif" /><img src="assets/contrib-anim.gif" width="100%" alt="1,377 contributions in the last year" /></picture>
+    <picture><source media="(prefers-color-scheme: dark)" srcset="assets/contrib-night-anim.gif" /><source media="(prefers-color-scheme: light)" srcset="assets/contrib-anim.gif" /><img src="assets/contrib-anim.gif" width="100%" alt="1,385 contributions in the last year" /></picture>
   </a>
 </p>
