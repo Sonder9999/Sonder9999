@@ -25,6 +25,7 @@ import datetime as dt
 import io
 import json
 import math
+import os
 import random
 import re
 import sys
@@ -72,11 +73,35 @@ NIGHT_TARGETS = ["#064E3B", "#047857", "#10B981", "#38BDF8"]
 # data
 # ---------------------------------------------------------------------------
 
-def fetch_page(user: str, retries: int = 3) -> str:
+def validate_days(days: list[dict], expected_total: int | None = None) -> list[dict]:
+    """Validate calendar days for continuity and correct structure."""
+    days.sort(key=lambda d: d["date"])
+    if not (360 <= len(days) <= 375):
+        raise ValueError(f"Expected 360-375 days, got {len(days)}; GitHub markup or API may have changed")
+
+    start = dt.date.fromisoformat(days[0]["date"])
+    if start.weekday() != 6:  # GitHub calendars start on Sunday
+        raise ValueError(f"First calendar day {start} is not a Sunday")
+    for i, day in enumerate(days):
+        if dt.date.fromisoformat(day["date"]) != start + dt.timedelta(days=i):
+            raise ValueError(f"Non-contiguous calendar around {day['date']}")
+        if not 0 <= day["level"] <= 4:
+            raise ValueError(f"Bad level {day['level']} on {day['date']}")
+
+    total = sum(d["count"] for d in days)
+    if expected_total is not None and expected_total != total:
+        raise ValueError(f"Expected total {expected_total} != calendar sum {total}")
+    if total <= 0:
+        raise ValueError("Calendar total is zero or empty")
+    return days
+
+
+def fetch_page(user: str, retries: int = 5) -> str:
     """Download the public contribution calendar fragment."""
     url = f"https://github.com/users/{user}/contributions"
     headers = {
-        "User-Agent": "Sonder9999-profile-updater/1.0 (+https://github.com/Sonder9999/Sonder9999)",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Accept-Language": "en-US,en;q=0.9",
     }
     last_error: Exception | None = None
@@ -87,11 +112,16 @@ def fetch_page(user: str, retries: int = 3) -> str:
                 if resp.status != 200:
                     raise RuntimeError(f"HTTP {resp.status} for {url}")
                 return resp.read().decode("utf-8", "replace")
-        except Exception as exc:  # network hiccup / rate limit
+        except Exception as exc:  # network hiccup / rate limit / 504 gateway timeout
             last_error = exc
             if attempt + 1 < retries:
-                time.sleep(2 ** attempt)
-    raise SystemExit(f"Could not fetch {url}: {last_error}")
+                delay = min(45.0, (2 ** attempt) * 2.0 + random.uniform(0.5, 2.0))
+                print(
+                    f"Fetch attempt {attempt + 1}/{retries} for {url} failed ({exc}); retrying in {delay:.1f}s...",
+                    file=sys.stderr,
+                )
+                time.sleep(delay)
+    raise RuntimeError(f"Could not fetch {url} after {retries} attempts: {last_error}")
 
 
 def parse_contributions(html: str) -> list[dict]:
@@ -124,28 +154,103 @@ def parse_contributions(html: str) -> list[dict]:
             }
         )
 
-    days.sort(key=lambda d: d["date"])
-    if not (360 <= len(days) <= 375):
-        raise SystemExit(f"Expected 360-375 days, got {len(days)}; GitHub markup may have changed")
-
-    start = dt.date.fromisoformat(days[0]["date"])
-    if start.weekday() != 6:  # GitHub calendars start on Sunday
-        raise SystemExit(f"First calendar day {start} is not a Sunday")
-    for i, day in enumerate(days):
-        if dt.date.fromisoformat(day["date"]) != start + dt.timedelta(days=i):
-            raise SystemExit(f"Non-contiguous calendar around {day['date']}")
-        if not 0 <= day["level"] <= 4:
-            raise SystemExit(f"Bad level {day['level']} on {day['date']}")
-
-    total = sum(d["count"] for d in days)
     header = re.search(r'<h2[^>]*id="js-contribution-activity-description"[^>]*>\s*([\d,]+)\s*contributions', html)
-    if header:
-        shown = int(header.group(1).replace(",", ""))
-        if shown != total:
-            raise SystemExit(f"Header total {shown} != calendar sum {total}")
-    if total <= 0:
-        raise SystemExit("Calendar total is zero or empty")
-    return days
+    expected_total = int(header.group(1).replace(",", "")) if header else None
+    return validate_days(days, expected_total=expected_total)
+
+
+def fetch_graphql(user: str, token: str, retries: int = 3) -> list[dict]:
+    """Fetch contributions via GitHub's official GraphQL API."""
+    query = """
+    query($login: String!) {
+      user(login: $login) {
+        contributionsCollection {
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                date
+                contributionCount
+                contributionLevel
+              }
+            }
+          }
+        }
+      }
+    }
+    """
+    req_body = json.dumps({"query": query, "variables": {"login": user}}).encode("utf-8")
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "User-Agent": "GitHub-Contributions-Updater/1.0",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+    level_map = {
+        "NONE": 0,
+        "FIRST_QUARTILE": 1,
+        "SECOND_QUARTILE": 2,
+        "THIRD_QUARTILE": 3,
+        "FOURTH_QUARTILE": 4,
+    }
+    last_error: Exception | None = None
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request("https://api.github.com/graphql", data=req_body, headers=headers)
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                if resp.status != 200:
+                    raise RuntimeError(f"HTTP {resp.status} from GitHub GraphQL API")
+                payload = json.loads(resp.read().decode("utf-8"))
+            if "errors" in payload:
+                raise RuntimeError(f"GraphQL errors: {payload['errors']}")
+            user_data = payload.get("data", {}).get("user")
+            if not user_data:
+                raise RuntimeError(f"User {user} not found in GraphQL response")
+            calendar = user_data["contributionsCollection"]["contributionCalendar"]
+            total = calendar["totalContributions"]
+            days: list[dict] = []
+            for week in calendar.get("weeks", []):
+                for day in week.get("contributionDays", []):
+                    days.append(
+                        {
+                            "date": day["date"],
+                            "count": day["contributionCount"],
+                            "level": level_map.get(day["contributionLevel"], 0),
+                        }
+                    )
+            return validate_days(days, expected_total=total)
+        except Exception as exc:
+            last_error = exc
+            if attempt + 1 < retries:
+                delay = (attempt + 1) * 2
+                print(f"GraphQL attempt {attempt + 1}/{retries} failed ({exc}); retrying in {delay}s...", file=sys.stderr)
+                time.sleep(delay)
+    raise RuntimeError(f"Failed to fetch GraphQL contributions: {last_error}")
+
+
+def get_contributions(user: str) -> list[dict]:
+    """Retrieve contribution data, trying public HTML first and GraphQL as fallback."""
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    html_error: Exception | None = None
+    try:
+        html = fetch_page(user)
+        return parse_contributions(html)
+    except Exception as exc:
+        html_error = exc
+        print(f"Public HTML contributions fetch failed: {exc}", file=sys.stderr)
+
+    if token:
+        try:
+            print("Attempting fallback to GitHub GraphQL API...", file=sys.stderr)
+            return fetch_graphql(user, token)
+        except Exception as gql_exc:
+            print(f"GraphQL fallback also failed: {gql_exc}", file=sys.stderr)
+            raise SystemExit(
+                f"Could not retrieve contributions for {user}:\n"
+                f"  HTML error: {html_error}\n"
+                f"  GraphQL error: {gql_exc}"
+            )
+    raise SystemExit(f"Could not retrieve contributions for {user}: {html_error}")
 
 
 def make_cells(days: list[dict]) -> tuple[list[dict], float]:
@@ -471,8 +576,7 @@ def main() -> None:
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args()
 
-    html = fetch_page(args.user)
-    days = parse_contributions(html)
+    days = get_contributions(args.user)
     cells, pitch = make_cells(days)
     total = sum(d["count"] for d in days)
     active = sum(1 for d in days if d["count"] > 0)

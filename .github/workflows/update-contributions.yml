@@ -44,9 +44,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r scripts/requirements.txt
 
-      # 抓取公开 contributions 页面 -> 渲染两张 GIF -> 更新 README alt 文本。
-      # 不需要 token；数据抓取失败或总数校验不通过时脚本会直接报错退出，不会提交坏图。
+      # 抓取 contributions 数据 -> 渲染两张 GIF -> 更新 README alt 文本。
+      # 优先抓取公开页面，遇网关超时/异常时自动重试并支持降级通过 GitHub GraphQL API 获取。
       - name: Regenerate contribution GIFs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/update_contributions.py
 
       - name: Commit and push when changed
